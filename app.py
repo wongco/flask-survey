@@ -107,4 +107,38 @@ def question_form(question_num):
 @app.route('/thanks')
 def display_thanks():
     """ displays thank you page - end of survey """
-    return render_template('thanks.html')
+
+    # retrieve selected survey name
+    sel_survey_name = session['sel_survey_name']
+
+    # retrieve questions for selected survey instance
+    questions = surveys[sel_survey_name].questions
+
+    # retrieve answers from session
+    answers = session["answers"]
+
+    # create list to pass to render with needed properties
+    display_answers = []
+    for idx, answer_item in enumerate(answers):
+        display_dict = {}
+        display_dict["question"] = questions[idx].question
+        display_dict["choice"] = answer_item["choice"]
+        display_dict["comment"] = answer_item["comment"]
+        display_answers.append(display_dict)
+
+    # if session.get("complete"):
+    #     completed = session["complete"]
+    # else:
+    #     completed = []
+
+    # completed.append(survey_selection)
+    # session["complete"] = completed
+
+    html = render_template("thanks.html", display_answers=display_answers)
+    resp = make_response(html)
+
+    # cookie = json.loads(request.cookies.get("complete", []))
+    # cookie.append(survey_selection)
+
+    # resp.set_cookie("complete", json.dumps(cookie))
+    return resp
