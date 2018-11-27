@@ -1,0 +1,25 @@
+<!-- Extending Base Template -->
+{% extends "base.html" %}
+
+<!-- Tile Content -->
+{% block title %} Current Question: {{ question_num }}/{{ total_questions }} {%
+endblock %}
+
+<!-- Body Content -->
+{% block body %}
+
+<div class="container">
+  <h2>Current Question: {{ question_num }}/{{ total_questions }}</h2>
+
+  <form action="/answer" method="POST">
+    <p>{{ question.question }}</p>
+
+    {% for choice in question.choices %}
+    <input type="radio" name="choice" value="{{choice}}" /> {{ choice }} <br />
+    {% endfor %} {% if question.allow_text %}
+    <textarea name="comment" placeholder="Comment"></textarea> {% endif %}
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+{% endblock %}

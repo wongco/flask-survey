@@ -8,10 +8,10 @@
 {% block body %}
 <div>
   <h1>{{ survey_title }}</h1>
-  <h2>Survey Questions: {{ num_of_questions }}</h2>
+  <h2>Survey Questions: {{ total_questions }}</h2>
   <p>{{ survey_instructions }}</p>
 
-  <form action="/questions/1" method="post">
+  <form action="/answer" method="post">
     <button type="submit">Start Survey</button>
   </form>
 </div>
