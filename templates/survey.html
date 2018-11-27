@@ -1,0 +1,19 @@
+<!-- Extends Body Template -->
+{% extends "base.html" %}
+
+<!-- Title Block -->
+{% block title %} Begin Survey {% endblock %}
+
+<!-- Body Block -->
+{% block body %}
+<div>
+  <h1>{{ survey_title }}</h1>
+  <h2>Survey Questions: {{ num_of_questions }}</h2>
+  <p>{{ survey_instructions }}</p>
+
+  <form action="/questions/1" method="post">
+    <button type="submit">Start Survey</button>
+  </form>
+</div>
+
+{% endblock %}
