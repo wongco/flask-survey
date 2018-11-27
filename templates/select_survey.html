@@ -1,0 +1,33 @@
+<!-- Extending Base Template -->
+{% extends "base.html" %}
+
+<!-- Tile Content -->
+{% block title %} Survey Selection {% endblock %}
+
+<!-- Body Content -->
+{% block body %}
+
+<div class="container">
+  <h1>Please select one survey:</h1>
+
+  <form action="/selected_survey" method="POST">
+    <select
+      onchange="this.form.submit()"
+      class="form-control mb-2"
+      name="sel_survey_name"
+    >
+      <!--
+        https://stackoverflow.com/questions/7231157/how-to-submit-form-on-change-of-dropdown-list
+      -->
+      <!--
+        https://stackoverflow.com/questions/8605516/default-select-option-as-blank
+      -->
+      <option disabled selected value> -- select an option -- </option>
+      {% for survey in surveys %} {% if survey not in completed %}
+      <option value="{{ survey }}">{{ survey }}</option>
+      {% endif %} {% endfor %}
+    </select>
+  </form>
+</div>
+
+{% endblock %}

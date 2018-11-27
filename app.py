@@ -10,21 +10,38 @@ app.debug = True
 debug = DebugToolbarExtension(app)
 
 
+@app.route('/')
+def select_survey():
+    """ displays page with survey options """
+    return render_template("select_survey.html", surveys=surveys)
+
+
+@app.route('/selected_survey', methods=["POST"])
+def save_survey():
+    """ saves selected survey name to session and redirect to display survey view"""
+
+    sel_survey_name = request.form.get("sel_survey_name")
+    session['sel_survey_name'] = sel_survey_name
+    return redirect('/survey')
+
+
 @app.route('/survey')
 def start_survey():
     """displays selected survey info and intializes responses list"""
 
-    sel_survey_name = "satisfaction"
+    # Retreive selected survey name from session
+    sel_survey_name = session['sel_survey_name']
+
+    # Retreive selected survey instance
     sel_survey = surveys[sel_survey_name]
 
     survey_title = sel_survey.title
     survey_instructions = sel_survey.instructions
     total_questions = len(sel_survey.questions)
 
-    session['sel_survey_name'] = sel_survey_name
-
+    # initialize current question in session to 1st
     session['current_question_num'] = 1
-    # initalize session key "answers" to empty list
+    # initialize session key "answers" to empty list
     session['answers'] = []
 
     return render_template('survey.html', survey_title=survey_title, survey_instructions=survey_instructions, total_questions=total_questions)
@@ -89,4 +106,5 @@ def question_form(question_num):
 
 @app.route('/thanks')
 def display_thanks():
+    """ displays thank you page - end of survey """
     return render_template('thanks.html')
