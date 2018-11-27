@@ -8,18 +8,23 @@ endblock %}
 <!-- Body Content -->
 {% block body %}
 
-<div class="container">
-  <h2>Current Question: {{ question_num }}/{{ total_questions }}</h2>
-
-  <form action="/answer" method="POST">
-    <p>{{ question.question }}</p>
-
-    {% for choice in question.choices %}
-    <input type="radio" name="choice" value="{{choice}}" /> {{ choice }} <br />
-    {% endfor %} {% if question.allow_text %}
-    <textarea name="comment" placeholder="Comment"></textarea> {% endif %}
-    <button type="submit">Submit</button>
-  </form>
+<div class="row">
+  <div class="mx-auto">
+    <form action="/answer" method="POST">
+      <div class="card" style="width: 24rem;">
+        <div class="card-body">
+          <h2>Current Question: {{ question_num }}/{{ total_questions }}</h2>
+          <h5 class="card-title">{{ question.question }}</h5>
+          {% for choice in question.choices %}
+          <input type="radio" name="choice" value="{{choice}}" required />
+          {{ choice }} <br />
+          {% endfor %} {% if question.allow_text %}
+          <textarea name="comment" placeholder="Comment"></textarea> {% endif %}
+        </div>
+        <button class="btn btn-success" type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 {% endblock %}

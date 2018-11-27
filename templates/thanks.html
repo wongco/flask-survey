@@ -6,17 +6,18 @@
 
 <!-- Body Block -->
 {% block body %}
-<h1>Thank You!</h1>
+<div>
+  <h1 class="mb-3">Thank You!</h1>
 
-<ol>
-  <p>Survey Answers:</p>
-  {% for answer_item in display_answers %}
-
-  <li>
-    <strong>{{ answer_item['question'] }}</strong>
-    {{ answer_item['choice'] }} {% if answer_item['comment'] %}
-    <span>{{ answer_item['comment'] }}</span> {% endif %}
-  </li>
-  {% endfor %}
-</ol>
+  <h4>Survey Answers:</h4>
+  <ol>
+    {% for answer_item in display_answers %}
+    <li>
+      <strong>{{ answer_item['question'] }}</strong>
+      {{ answer_item['choice'] }} {% if answer_item['comment'] %}
+      <span>{{ answer_item['comment'] }}</span> {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+</div>
 {% endblock %}
