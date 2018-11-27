@@ -23,7 +23,7 @@
         https://stackoverflow.com/questions/8605516/default-select-option-as-blank
       -->
       <option disabled selected value> -- select an option -- </option>
-      {% for survey in surveys %} {% if survey not in completed %}
+      {% for survey in surveys %} {% if survey not in completed_list %}
       <option value="{{ survey }}">{{ survey }}</option>
       {% endif %} {% endfor %}
     </select>

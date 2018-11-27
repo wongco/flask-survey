@@ -1,4 +1,4 @@
-from flask import Flask, request, session, render_template, redirect, make_response
+from flask import Flask, request, session, render_template, redirect, make_response, jsonify
 from surveys import surveys
 from flask_debugtoolbar import DebugToolbarExtension
 import json
@@ -8,12 +8,21 @@ app.secret_key = "RANDOM KEY"
 
 app.debug = True
 debug = DebugToolbarExtension(app)
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 
 @app.route('/')
 def select_survey():
     """ displays page with survey options """
-    return render_template("select_survey.html", surveys=surveys)
+
+    # retrieve completed_list from cookies
+    completed_list = request.cookies.get("complete", [])
+
+    # is cookie property exists, JSON decode it
+    if completed_list:
+        completed_list = json.loads(completed_list)
+
+    return render_template("select_survey.html", surveys=surveys, completed_list=completed_list)
 
 
 @app.route('/selected_survey', methods=["POST"])
@@ -88,6 +97,7 @@ def question_form(question_num):
 
     # if next question is unavailable, redirect to GET /thanks
     if question_num > total_questions:
+
         return redirect("/thanks")
 
     # index of question to render
@@ -126,19 +136,21 @@ def display_thanks():
         display_dict["comment"] = answer_item["comment"]
         display_answers.append(display_dict)
 
-    # if session.get("complete"):
-    #     completed = session["complete"]
-    # else:
-    #     completed = []
-
-    # completed.append(survey_selection)
-    # session["complete"] = completed
-
+    # save render of html and create resp object
     html = render_template("thanks.html", display_answers=display_answers)
     resp = make_response(html)
 
-    # cookie = json.loads(request.cookies.get("complete", []))
-    # cookie.append(survey_selection)
+    # grab current completed_list from cookie and JSON decode
+    completed_list = request.cookies.get("complete", [])
 
-    # resp.set_cookie("complete", json.dumps(cookie))
+    # is cookie property exists, JSON decode it
+    if completed_list:
+        completed_list = json.loads(completed_list)
+
+    # add current completed survey to list and set cookie with JSON encode if not already in - handles edge case of user refresh
+    if sel_survey_name not in completed_list:
+        completed_list.append(sel_survey_name)
+
+    resp.set_cookie("complete", json.dumps(completed_list))
+
     return resp
